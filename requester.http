@@ -1,0 +1,13 @@
+### Test
+GET http://localhost:3990
+
+### Test
+POST http://localhost:3990/webhook/transaction
+X-Webhook-Signature: sha256=a346780447f66927de9678c2b248d52a176ac2aac5f543b754115e498fea0e3d
+Content-Type: application/json
+
+{
+  "id": 1,
+  "monto": 100,
+  "estado": "aprobado"
+}
