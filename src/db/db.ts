@@ -1,3 +1,5 @@
-import 'dotenv/config';
-import { drizzle } from 'drizzle-orm/libsql';
-export const db = drizzle(process.env.DB_FILE_NAME!);
+import "dotenv/config";
+import { drizzle } from "drizzle-orm/libsql";
+import { env } from "../config/env.js";
+
+// export const db = drizzle(env.DATABASE_URL);
