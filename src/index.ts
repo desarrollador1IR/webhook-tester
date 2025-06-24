@@ -2,12 +2,14 @@ import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 import { logger } from "hono/logger";
 import crypto from "node:crypto";
+import { cors } from "hono/cors";
 
 import { env } from "./config/env.js";
 // import { db } from "./db/db.js";
 import { webhookTransactions } from "./db/schema.js";
 
 const app = new Hono();
+app.use("/*", cors());
 app.use(logger());
 
 // --- Importante: El SECRETO COMPARTIDO ---
