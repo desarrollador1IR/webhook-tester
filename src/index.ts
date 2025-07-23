@@ -7,6 +7,7 @@ import { cors } from "hono/cors";
 import { env } from "./config/env.js";
 // import { db } from "./db/db.js";
 import { webhookTransactions } from "./db/schema.js";
+import { handleDomiciliacionCuenta, handleDomiciliacionTelefono } from "./domiciliacion.js";
 
 const app = new Hono();
 app.use("/*", cors());
@@ -114,6 +115,12 @@ app.post("/webhook/transaction", async (c) => {
 	}
 });
 
+// --- Endpoint Domiciliación por Cuenta (20 dígitos) ---
+app.post("/domiciliacion/cuenta", handleDomiciliacionCuenta);
+
+// --- Endpoint Domiciliación por Teléfono ---
+app.post("/domiciliacion/telefono", handleDomiciliacionTelefono);
+
 serve(
 	{
 		fetch: app.fetch,
@@ -121,5 +128,13 @@ serve(
 	},
 	(info) => {
 		console.log(`Server is running on http://localhost:${info.port}`);
+		console.log("--------------------------------------");
+		console.log("Routes available:")
+		console.log("--------------------------------------");
+		console.log("GET /")
+		console.log("POST /webhook/transaction")
+		console.log("POST /domiciliacion/cuenta")
+		console.log("POST /domiciliacion/telefono")
+		console.log("--------------------------------------");
 	},
 );
