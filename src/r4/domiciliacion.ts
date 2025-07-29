@@ -49,7 +49,8 @@ export async function handleDomiciliacionCuenta(c: Context) {
     return c.json({
       codigo: "202",
       mensaje: "Se ha recibido el mensaje de forma satisfactoria",
-      uuid: crypto.randomUUID(),
+      uuid: 'e63a7892-f00f-46a4-b7d1-a6e8ac7ab094',
+      // uuid: crypto.randomUUID(),
     });
   } else if (!docId || !cuenta || !nombre || !concepto) {
     return c.json({ codigo: "07", mensaje: "Request Inválida, error en el campo: DocId", uuid: "" });
@@ -87,7 +88,7 @@ export async function handleDomiciliacionTelefono(c: Context) {
     return c.json({
       codigo: "202",
       mensaje: "Se ha recibido el mensaje de forma satisfactoria",
-      uuid: crypto.randomUUID(),
+      uuid: 'e63a7892-f00f-46a4-b7d1-a6e8ac7ab094',
     });
   } else if (!docId || !telefono || !nombre || !banco || !concepto) {
     return c.json({ codigo: "07", mensaje: "Request Inválida, error en el campo: DocId", uuid: "" });
