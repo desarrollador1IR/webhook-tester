@@ -7,7 +7,8 @@ import { cors } from "hono/cors";
 import { env } from "./config/env.js";
 // import { db } from "./db/db.js";
 import { webhookTransactions } from "./db/schema.js";
-import { handleDomiciliacionCuenta, handleDomiciliacionTelefono } from "./domiciliacion.js";
+import { handleDomiciliacionCuenta, handleDomiciliacionTelefono } from "./r4/domiciliacion.js";
+import { GetStatusOperation } from "./r4/consultar-operaciones.js";
 
 const app = new Hono();
 app.use("/*", cors());
@@ -121,6 +122,8 @@ app.post("/domiciliacion/cuenta", handleDomiciliacionCuenta);
 // --- Endpoint Domiciliación por Teléfono ---
 app.post("/domiciliacion/telefono", handleDomiciliacionTelefono);
 
+app.post('/consultar-operaciones', GetStatusOperation);
+
 serve(
 	{
 		fetch: app.fetch,
@@ -135,6 +138,7 @@ serve(
 		console.log("POST /webhook/transaction")
 		console.log("POST /domiciliacion/cuenta")
 		console.log("POST /domiciliacion/telefono")
+		console.log("POST /consultar-operaciones")
 		console.log("--------------------------------------");
 	},
 );
