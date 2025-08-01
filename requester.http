@@ -11,3 +11,9 @@ Content-Type: application/json
   "monto": 100,
   "estado": "aprobado"
 }
+
+### Test
+POST http://localhost:3990/cargobs
+apikey: pkf9d8cd98-0d66-376c-934b-be7addfc126d
+Content-Type: multipart/form-data
+

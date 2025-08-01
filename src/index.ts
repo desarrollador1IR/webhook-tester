@@ -13,6 +13,7 @@ import {
   handleDomiciliacionTelefono,
 } from "./r4/domiciliacion.js";
 import { GetStatusOperation } from "./r4/consultar-operaciones.js";
+import { hanldePaymentBolivarTDC } from "./bancamiga/bolivares/tdc-bolivar.js";
 
 const app = new Hono();
 app.use("/*", cors());
@@ -130,6 +131,8 @@ app.post("/consultar-operaciones", GetStatusOperation);
 
 app.post("domiciliacion/telefono/validation", handleAffiliationByPhone);
 
+app.post("/cargobs", hanldePaymentBolivarTDC);
+
 serve(
   {
     fetch: app.fetch,
@@ -145,6 +148,7 @@ serve(
     console.log("POST /domiciliacion/cuenta");
     console.log("POST /domiciliacion/telefono");
     console.log("POST /consultar-operaciones");
+    console.log("POST /cargobs");
     console.log("--------------------------------------");
   }
 );
