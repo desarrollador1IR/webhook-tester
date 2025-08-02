@@ -15,6 +15,7 @@ import {
 import { GetStatusOperation } from './r4/consultar-operaciones.js'
 import { hanldePaymentBolivarTDC } from './bancamiga/bolivares/tdc-bolivar.js'
 import { handleR4C2p } from './r4/c2p.js'
+import { handleDebitoInmediato } from './r4/debito-inmediato.js'
 
 const app = new Hono()
 app.use('/*', cors())
@@ -136,6 +137,8 @@ app.post('/cargobs', hanldePaymentBolivarTDC)
 
 app.post('/R4c2p', handleR4C2p)
 
+app.post('/DebitoInmediato', handleDebitoInmediato)
+
 serve(
 	{
 		fetch: app.fetch,
@@ -153,6 +156,7 @@ serve(
 		console.log('POST /consultar-operaciones')
 		console.log('POST /cargobs')
 		console.log('POST /R4c2p')
+		console.log('POST /DebitoInmediato')
 		console.log('--------------------------------------')
 	},
 )
