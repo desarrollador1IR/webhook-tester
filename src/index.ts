@@ -16,6 +16,8 @@ import { GetStatusOperation } from './r4/consultar-operaciones.js'
 import { hanldePaymentBolivarTDC } from './bancamiga/bolivares/tdc-bolivar.js'
 import { handleR4C2p } from './r4/c2p.js'
 import { handleDebitoInmediato } from './r4/debito-inmediato.js'
+import { handlePaymentC2p } from './bancamiga/pmc/c2p.js'
+import { handleFindPmByRef } from './bancamiga/pmc/pm-by-ref.js'
 
 const app = new Hono()
 app.use('/*', cors())
@@ -133,11 +135,21 @@ app.post('/consultar-operaciones', GetStatusOperation)
 
 app.post('domiciliacion/telefono/validation', handleAffiliationByPhone)
 
+/**
+ * Bancamiga
+ */
+
 app.post('/cargobs', hanldePaymentBolivarTDC)
+app.post('/bcmiga/public/protected/c2p/payments/v2', handlePaymentC2p)
+app.post('/bcmiga/public/protected/pm/find', handleFindPmByRef)
+
+/**
+ * R4
+ */
 
 app.post('/R4c2p', handleR4C2p)
-
 app.post('/DebitoInmediato', handleDebitoInmediato)
+
 
 serve(
 	{
@@ -149,14 +161,24 @@ serve(
 		console.log('--------------------------------------')
 		console.log('Routes available:')
 		console.log('--------------------------------------')
+		
 		console.log('GET /')
 		console.log('POST /webhook/transaction')
+
+		console.log('--------------------------------------')
+		console.log('R4')
 		console.log('POST /domiciliacion/cuenta')
 		console.log('POST /domiciliacion/telefono')
 		console.log('POST /consultar-operaciones')
-		console.log('POST /cargobs')
 		console.log('POST /R4c2p')
 		console.log('POST /DebitoInmediato')
+		
+
+		console.log('--------------------------------------')
+		console.log('Bancamiga')
+		console.log('POST /cargobs')
+		console.log('POST /bcmiga/public/protected/c2p/payments/v2')
+		console.log('POST /bcmiga/public/protected/pm/find')
 		console.log('--------------------------------------')
 	},
 )

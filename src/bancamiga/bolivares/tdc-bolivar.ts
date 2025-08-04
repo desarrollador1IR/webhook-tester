@@ -40,6 +40,9 @@ export const hanldePaymentBolivarTDC = async (c: Context) => {
   }
   // 2. Obtener y validar el Body
   const body = await c.req.formData()
+
+  console.log('body', body)
+
   const requiredFields = ['monto', 'numero', 'mes', 'ano', 'cvc', 'cedula']
 
   for (const field of requiredFields) {
@@ -79,7 +82,7 @@ export const hanldePaymentBolivarTDC = async (c: Context) => {
       "respuesta_numero": "05",
       "mensaje_sistema": "210 This value must be greater than or equal to 1. parameter_invalid_integer El monto de la operacion es invalido",
       "referencia": referencia
-    }, 400)
+    }, 200)
   }
 
   // Validar numero de tarjeta
@@ -95,7 +98,7 @@ export const hanldePaymentBolivarTDC = async (c: Context) => {
       "respuesta_numero": "05",
       "mensaje_sistema": "214Your card number is incorrect. El número de tarjeta es incorrecto.",
       "referencia": referencia
-    }, 400)
+    }, 200)
   }
 
   // Validar mes
@@ -107,7 +110,7 @@ export const hanldePaymentBolivarTDC = async (c: Context) => {
       "respuesta_codigo": "05",
       "respuesta_numero": "",
       "respuesta_data": ""
-    }, 400)
+    }, 200)
   }
 
   // Validar año
@@ -123,7 +126,7 @@ export const hanldePaymentBolivarTDC = async (c: Context) => {
         "respuesta_numero": "05",
         "mensaje_sistema": "214Your card's expiration year is invalid. El año de vencimiento no es válido.",
         "referencia": referencia
-      }, 400)
+      }, 200)
   }
 
   // Validar CVC
@@ -135,7 +138,7 @@ export const hanldePaymentBolivarTDC = async (c: Context) => {
       "respuesta_codigo": "05",
       "respuesta_numero": "",
       "respuesta_data": ""
-    }, 400)
+    }, 200)
   }
 
   // 4. Simular respuesta de éxito
