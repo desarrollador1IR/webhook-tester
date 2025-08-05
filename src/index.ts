@@ -34,13 +34,6 @@ app.get("/", (c) => {
   return c.text("Hello Hono! Webhook receiver is ready.");
 });
 
-app.get("health", (c) => {
-  return c.json({
-    api: "WORKING GOOD",
-    timestamp: new Date(),
-  });
-});
-
 // --- Endpoint para Recibir Webhooks de Transacciones ---
 app.post("/webhook/transaction", async (c) => {
   // 1. Loggear la solicitud recibida
