@@ -1,147 +1,161 @@
-import type { Context } from "hono";
-import crypto from "node:crypto";
-
-// Utilidad para verificar HMAC-SHA256
-// function verifyHmac({
-//   valueToSign,
-//   secret,
-//   receivedSignature,
-// }: {
-//   valueToSign: string;
-//   secret: string;
-//   receivedSignature: string;
-// }): boolean {
-//   const hmac = crypto.createHmac("sha256", secret);
-//   hmac.update(valueToSign);
-//   const expectedSignature = hmac.digest("hex");
-//   return crypto.timingSafeEqual(
-//     Buffer.from(receivedSignature, "hex"),
-//     Buffer.from(expectedSignature, "hex")
-//   );
-// }
+import type { Context } from 'hono'
+// import crypto from 'node:crypto'
+// import { db } from '../db/db.js'
+// import { DomiciliationTransactions } from '../db/schema.js'
+import { domiciliationMocking } from './domiciliation/responses-mocking.js'
 
 // Handler para domiciliación por cuenta (20 dígitos)
 export async function handleDomiciliacionCuenta(c: Context) {
-  const commerceToken = c.req.header("Commerce");
-  const authorization = c.req.header("Authorization");
+	const commerceToken = c.req.header('Commerce')
+	const authorization = c.req.header('Authorization')
 
-  if (!commerceToken || !authorization) {
-    return c.json(
-      { codigo: "11", mensaje: "Error de respuesta", uuid: "" },
-      401
-    );
-  }
+	if (!commerceToken || !authorization) {
+		return c.json(
+			{ codigo: '11', mensaje: 'Error de respuesta', uuid: '' },
+			401,
+		)
+	}
 
-  const body = await c.req.json();
-  const { cuenta, monto, docId, nombre, concepto } = body;
+	const body = await c.req.json()
+	const { cuenta, monto, docId, nombre, concepto } = body
 
-  // El valor a firmar es la cuenta
-  //   const receivedSignature = authorization;
-  //   const isValid = verifyHmac({
-  //     valueToSign: cuenta,
-  //     secret: commerceToken,
-  //     receivedSignature,
-  //   });
+	if (parseFloat(monto) < 0) {
+		return c.json({
+			codigo: 'AM02',
+			mensaje: 'Monto de la transacción no permitido',
+			uuid: '',
+		})
+	}
 
-  //   if (!isValid) {
-  //     return c.json({ codigo: "11", mensaje: "Error de respuesta", uuid: "" }, 401);
-  //   }
+	// ACCP
+	if (parseFloat(monto) > 1000) {
+		return c.json({
+			code: 'ACCP',
+			reference: '16413121',
+			status: 'success',
+		})
+	}
 
-  // Simulación de lógica bancaria
-  if (parseFloat(monto) > 500) {
-    return c.json({
-      codigo: "202",
-      mensaje: "Se ha recibido el mensaje de forma satisfactoria",
-      uuid: "e63a7892-f00f-46a4-b7d1-a6e8ac7ab094",
-      // uuid: crypto.randomUUID(),
-    });
-  } else if (!docId || !cuenta || !nombre || !concepto) {
-    return c.json({
-      codigo: "07",
-      mensaje: "Request Inválida, error en el campo: DocId",
-      uuid: "",
-    });
-  } else {
-    return c.json({ codigo: "11", mensaje: "Error de respuesta", uuid: "" });
-  }
+	if (parseFloat(monto) < 500) {
+		return c.json({
+			codigo: '202',
+			mensaje: 'Se ha recibido el mensaje de forma satisfactoria',
+			uuid: '04c8a596-f1c5-4c68-a984-2216ff98',
+		})
+	}
+
+	// // if mount > 500, its pending.
+	// if (parseFloat(monto) > 500) {
+	// 	return c.json({
+	// 		codigo: '202',
+	// 		mensaje: 'Se ha recibido el mensaje de forma satisfactoria',
+	// 		uuid: crypto.randomUUID(),
+	// 		// uuid: 'e63a7892-f00f-46a4-b7d1-a6e8ac7ab094',
+	// 	})
+	// } else if (!docId || !cuenta || !nombre || !concepto) {
+	// 	return c.json({
+	// 		codigo: '07',
+	// 		mensaje: 'Request Inválida, error en el campo: DocId',
+	// 		uuid: '',
+	// 	})
+	// } else {
+	// 	return c.json({ codigo: '11', mensaje: 'Error de respuesta', uuid: '' })
+	// }
 }
 
 // Handler para domiciliación por teléfono
 export async function handleDomiciliacionTelefono(c: Context) {
-  const commerceToken = c.req.header("Commerce");
-  const authorization = c.req.header("Authorization");
+	const commerceToken = c.req.header('Commerce')
+	const authorization = c.req.header('Authorization')
 
-  if (!commerceToken || !authorization) {
-    return c.json(
-      { codigo: "11", mensaje: "Error de respuesta", uuid: "" },
-      401
-    );
-  }
+	if (!commerceToken || !authorization) {
+		return c.json(
+			{ codigo: '11', mensaje: 'Error de respuesta', uuid: '' },
+			401,
+		)
+	}
 
-  const body = await c.req.json();
-  const { telefono, monto, docId, nombre, banco, concepto } = body;
+	const body = await c.req.json()
+	const { telefono, monto, docId, nombre, banco, concepto } = body
 
-  // El valor a firmar es el teléfono
-  //   const receivedSignature = authorization;
-  //   const isValid = verifyHmac({
-  //     valueToSign: telefono,
-  //     secret: commerceToken,
-  //     receivedSignature,
-  //   });
+	if (parseFloat(monto) < 0) {
+		return c.json({
+			codigo: 'AM02',
+			mensaje: 'Monto de la transacción no permitido',
+			uuid: '',
+		})
+	}
 
-  //   if (!isValid) {
-  //     return c.json({ codigo: "11", mensaje: "Error de respuesta", uuid: "" }, 401);
-  //   }
+	// ACCP
+	if (parseFloat(monto) > 1000) {
+		return c.json({
+			code: 'ACCP',
+			reference: '16413121',
+			status: 'success',
+		})
+	}
 
-  const goodUUID = "e63a7892-f00f-46a4-b7d1-a6e8ac7ab094";
-  const badUUID = crypto.randomUUID();
+	if (parseFloat(monto) < 500) {
+		return c.json({
+			codigo: '202',
+			mensaje: 'Se ha recibido el mensaje de forma satisfactoria',
+			uuid: '04c8a596-f1c5-4c68-a984-2216ff98',
+		})
+	}
 
-  const isGood = !false;
+	// El valor a firmar es el teléfono
+	//   const receivedSignature = authorization;
+	//   const isValid = verifyHmac({
+	//     valueToSign: telefono,
+	//     secret: commerceToken,
+	//     receivedSignature,
+	//   });
 
-  // Simulación de lógica bancaria
-  if (parseFloat(monto) < 500) {
-    return c.json({
-      codigo: "202",
-      mensaje: "Se ha recibido el mensaje de forma satisfactoria",
-      // uuid: 'e63a7892-f00f-46a4-b7d1-a6e8ac7ab094',
-      uuid: isGood ? goodUUID : badUUID,
-    });
-  } else if (!docId || !telefono || !nombre || !banco || !concepto) {
-    return c.json({
-      codigo: "07",
-      mensaje: "Request Inválida, error en el campo: DocId",
-      uuid: "",
-    });
-  } else {
-    return c.json({ codigo: "11", mensaje: "Error de respuesta", uuid: "" });
-  }
+	//   if (!isValid) {
+	//     return c.json({ codigo: "11", mensaje: "Error de respuesta", uuid: "" }, 401);
+	//   }
+
+	// const goodUUID = 'e63a7892-f00f-46a4-b7d1-a6e8ac7ab094'
+	// const badUUID = crypto.randomUUID()
+
+	// const isGood = !false
+
+	// // Simulación de lógica bancaria
+	// if (parseFloat(monto) < 500) {
+	// 	return c.json({
+	// 		codigo: '202',
+	// 		mensaje: 'Se ha recibido el mensaje de forma satisfactoria',
+	// 		// uuid: 'e63a7892-f00f-46a4-b7d1-a6e8ac7ab094',
+	// 		uuid: isGood ? goodUUID : badUUID,
+	// 	})
+	// } else if (!docId || !telefono || !nombre || !banco || !concepto) {
+	// 	return c.json({
+	// 		codigo: '07',
+	// 		mensaje: 'Request Inválida, error en el campo: DocId',
+	// 		uuid: '',
+	// 	})
+	// } else {
+	// 	return c.json({ codigo: '11', mensaje: 'Error de respuesta', uuid: '' })
+	// }
 }
 
-// Simulador de "afiliacion" para domiciliación via telefono
-export async function handleAffiliationByPhone(c: Context) {
-  // const commerceToken = c.req.header("Commerce");
-  // const authorization = c.req.header("Authorization");
+export async function handleGetOrderStatus(c: Context) {
+	const commerceToken = c.req.header('Commerce')
+	const authorization = c.req.header('Authorization')
 
-  // if (!commerceToken || !authorization) {
-  //   return c.json({ codigo: "11", mensaje: "Error de respuesta", uuid: "" }, 401);
-  // }
+	if (!commerceToken || !authorization) {
+		return c.json(
+			{ codigo: '11', mensaje: 'Error de respuesta', uuid: '' },
+			401,
+		)
+	}
 
-  const body = await c.req.json();
-  const { telefono, nombre, banco, docId, concepto } = body;
+	const body = await c.req.json()
+	const { Id } = body
 
-  if (!telefono || !nombre || !banco || !docId) {
-    return c.json({
-      codigo: "07",
-      mensaje: "Request Inválida, error en el campo: DocId",
-      uuid: "",
-    });
-  }
+	// Seleccionar un mensaje aleatorio de domiciliationMocking
+	const randomIndex = Math.floor(Math.random() * domiciliationMocking.length)
+	const randomResponse = domiciliationMocking[randomIndex]
 
-  return c.json({
-    codigo: "202",
-    mensaje: "Se ha recibido el mensaje de forma satisfactoria",
-    uuid: "e63a7892-f00f-46a4-b7d1-a6e8ac7ab094",
-  });
-
-  // El valor a firmar es el teléfono
+	return c.json(randomResponse)
 }
