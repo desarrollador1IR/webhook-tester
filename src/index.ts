@@ -50,8 +50,8 @@ app.post("/webhook/transaction", async (c) => {
   console.log("--------------------------------------");
 
   // 3. Obtener la firma HMAC del encabezado
-  const signatureHeader = c.req.header("X-Webhook-Signature");
-  console.log("Received X-Webhook-Signature:", signatureHeader);
+  const signatureHeader = c.req.header("x-webhook-fapay");
+  console.log("Received x-webhook-fapay:", signatureHeader);
 
   console.log("--------------------------------------");
   console.log("--------------------------------------");
